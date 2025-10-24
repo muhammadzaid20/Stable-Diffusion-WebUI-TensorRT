@@ -2,7 +2,7 @@
 
 This extension enables the best performance on NVIDIA RTX GPUs for Stable Diffusion with TensorRT.
 You need to install the extension and generate optimized engines before using the extension. Please follow the instructions below to set everything up.
-Supports Stable Diffusion 1.5,2.1, SDXL, SDXL Turbo, and LCM. For SDXL and SDXL Turbo, we recommend using a GPU with 12 GB or more VRAM for best performance due to its size and computational intensity. 
+Supports Stable Diffusion 1.5,2.1, SDXL, SDXL Turbo, and LCM. For SDXL and SDXL Turbo, we recommend using a GPU with 12 GB or more VRAM for best performance due to its size and computational intensity. Lovelace, Ada, and Blackwell GPUs are all supported through TensorRT 10.x.
 
 ## Installation
 
@@ -56,7 +56,22 @@ Each preset can be adjusted with the “Advanced Settings” option. More detail
 ## Requirements
 Driver:
 
- Linux: >= 450.80.02
-- Windows: >= 452.39
+- Linux: >= 550.xx (CUDA 12 capable)
+- Windows: >= 552.xx (CUDA 12 capable)
 
-We always recommend keeping the driver up-to-date for system wide performance improvements.
+TensorRT 10.x depends on CUDA 12 components. Keeping your driver on the latest production branch is strongly recommended to unlock FP8 execution, newer architectures, and future TensorRT releases.
+
+### Advanced installation options
+
+The extension installs TensorRT automatically through `install.py`. Environment variables can be supplied before launching Automatic1111 to customize the packages that are installed:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `TENSORRT_PIP_PACKAGE` | `tensorrt` | Python package to install. |
+| `TENSORRT_PIP_VERSION` | `10.13.3.9` | Exact TensorRT version. Leave empty to install the latest available. |
+| `TENSORRT_MIN_VERSION` | `9.0.0` | Minimum version required before forcing a reinstall. |
+| `TENSORRT_PIP_EXTRA_INDEX_URL` | `https://pypi.nvidia.com` | Extra index used when installing TensorRT. |
+| `TENSORRT_CUDNN_PACKAGE` | `nvidia-cudnn-cu12` | Temporary cuDNN package used to satisfy wheel dependencies. Set to empty to skip. |
+| `TENSORRT_CUDNN_VERSION` | `9.14.0.64` | Version of the cuDNN bootstrap package. |
+
+These knobs allow the extension to remain compatible with upcoming TensorRT or CUDA releases without requiring repository changes.
